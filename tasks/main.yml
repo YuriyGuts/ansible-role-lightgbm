@@ -1,0 +1,55 @@
+---
+- name: Install LightGBM dependencies
+  become: yes
+  apt:
+    name: '{{ item }}'
+    state: latest
+    update_cache: yes
+  with_items: '{{ lightgbm_dependencies }}'
+
+- name: Check Python version
+  command: python --version
+  register: python_version_output
+  changed_when: no
+
+- name: Upgrade libgcc if we're running Anaconda
+  when: python_version_output.stderr | search('Anaconda')
+  block:
+    - name: Add anaconda to the list of channels
+      command: conda config --append channels anaconda
+      changed_when: no
+    - name: Update libgcc for Anaconda
+      command: conda install -y libgcc
+      register: lib_update_result
+      changed_when: not (lib_update_result.stdout | search('All requested packages already installed'))
+
+- name: Clone LightGBM repository
+  git:
+    repo: https://github.com/Microsoft/LightGBM
+    recursive: yes
+    dest: '{{ lightgbm_clone_dir }}'
+
+- name: Create build directory
+  file:
+    path: '{{ lightgbm_build_dir }}'
+    state: directory
+
+- name: Run CMake
+  command: 'cmake {{ lightgbm_build_flags }} ..'
+  args:
+    chdir: '{{ lightgbm_build_dir }}'
+
+- name: Run Make
+  make:
+    chdir: '{{ lightgbm_build_dir }}'
+
+- name: Install Python dependencies
+  pip:
+    name: '{{ item }}'
+    state: present
+  with_items: '{{ lightgbm_python_dependencies }}'
+
+- name: Install the Python package
+  command: python setup.py install
+  args:
+    chdir: '{{ lightgbm_python_package_dir }}'

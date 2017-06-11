@@ -1,0 +1,23 @@
+---
+lightgbm_cpu_dependencies:
+  - cmake
+  - build-essential
+  - libboost-dev
+  - libboost-system-dev
+  - libboost-filesystem-dev
+
+lightgbm_gpu_dependencies:
+  - ocl-icd-libopencl1
+  - ocl-icd-opencl-dev
+
+lightgbm_python_dependencies:
+  - setuptools
+  - numpy
+  - scipy
+  - scikit-learn
+
+lightgbm_dependencies: '{{ lightgbm_enable_gpu_support | ternary(lightgbm_cpu_dependencies + lightgbm_gpu_dependencies, lightgbm_cpu_dependencies) }}'
+lightgbm_clone_dir: '{{ ansible_env.HOME }}/src/LightGBM'
+lightgbm_build_dir: '{{ lightgbm_clone_dir }}/build'
+lightgbm_python_package_dir: '{{ lightgbm_clone_dir }}/python-package'
+lightgbm_build_flags: '{{ lightgbm_enable_gpu_support | ternary("-DUSEGPU=1", "") }}'
