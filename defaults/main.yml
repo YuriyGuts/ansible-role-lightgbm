@@ -1,3 +1,6 @@
 ---
 # Install additional OpenCL dependencies and enable GPU build flags.
 lightgbm_enable_gpu_support: no
+
+# Install the lightgbm Python package after building the project.
+lightgbm_install_python_package: yes

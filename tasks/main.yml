@@ -8,12 +8,13 @@
   with_items: '{{ lightgbm_dependencies }}'
 
 - name: Check Python version
+  when: lightgbm_install_python_package
   command: python --version
   register: python_version_output
   changed_when: no
 
 - name: Upgrade libgcc if we're running Anaconda
-  when: python_version_output.stderr | search('Anaconda')
+  when: lightgbm_install_python_package and python_version_output.stderr | search('Anaconda')
   block:
     - name: Add anaconda to the list of channels
       command: conda config --append channels anaconda
@@ -44,12 +45,14 @@
     chdir: '{{ lightgbm_build_dir }}'
 
 - name: Install Python dependencies
+  when: lightgbm_install_python_package
   pip:
     name: '{{ item }}'
     state: present
   with_items: '{{ lightgbm_python_dependencies }}'
 
 - name: Install the Python package
+  when: lightgbm_install_python_package
   command: python setup.py install
   args:
     chdir: '{{ lightgbm_python_package_dir }}'
