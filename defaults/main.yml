@@ -8,3 +8,6 @@ lightgbm_install_python_package: yes
 # Package manager to use for installing Python prerequisites.
 # You might have pip or pip3 on the target machine.
 lightgbm_python_package_manager: pip
+
+# Whether to run the Python package manager with elevated privileges.
+lightgbm_python_package_manager_become: no

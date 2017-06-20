@@ -6,12 +6,14 @@ An Ansible role to install LightGBM on Ubuntu-based distros.
 Requirements
 ------------
 
-This role assumes that the user on the target system can install Python packages without `sudo`.
-If this is not the case, add `become: yes` to the role parameters in your playbook.
+Note:
 
-**Note**: Due to possible issues with `libgomp.so` dependencies when using Anaconda,
-the role adds `anaconda` to the list of channels and upgrades the `libgcc` package 
-to the latest version.
+* If the target environment requires running `pip` with elevated privileges,
+  make sure to set `lightgbm_python_package_manager_become: yes` in your playbook.
+
+* Due to possible issues with `libgomp.so` dependencies when using Anaconda,
+  the role adds `anaconda` to the list of channels and upgrades the `libgcc` package 
+  to the latest version.
 
 Role Variables
 --------------

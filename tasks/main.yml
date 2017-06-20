@@ -46,6 +46,7 @@
 
 - name: Install Python dependencies
   when: lightgbm_install_python_package
+  become: '{{ lightgbm_python_package_manager_become }}'
   pip:
     name: '{{ item }}'
     state: present
