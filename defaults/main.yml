@@ -4,3 +4,7 @@ lightgbm_enable_gpu_support: no
 
 # Install the lightgbm Python package after building the project.
 lightgbm_install_python_package: yes
+
+# Package manager to use for installing Python prerequisites.
+# You might have pip or pip3 on the target machine.
+lightgbm_python_package_manager: pip

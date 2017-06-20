@@ -49,6 +49,7 @@
   pip:
     name: '{{ item }}'
     state: present
+    executable: '{{ lightgbm_python_package_manager }}'
   with_items: '{{ lightgbm_python_dependencies }}'
 
 - name: Install the Python package
